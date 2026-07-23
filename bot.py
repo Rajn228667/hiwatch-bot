@@ -531,13 +531,13 @@ async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 
 # ─── MAIN ────────────────────────────────────────────
 
-def main() -> None:
+def build_application() -> Application:
+    """Build the Telegram bot Application with all handlers.
+    Shared between polling mode (bot.py main) and WSGI mode (wsgi.py for PythonAnywhere).
+    """
     if not BOT_TOKEN:
-        print("❌ BOT_TOKEN не найден в .env!")
-        print("Создайте .env файл: BOT_TOKEN=ваш_токен")
-        return
+        raise RuntimeError("BOT_TOKEN не найден в .env!")
 
-    # Build application with performance optimizations
     app = (
         Application.builder()
         .token(BOT_TOKEN)
@@ -565,6 +565,17 @@ def main() -> None:
 
     # Errors
     app.add_error_handler(error_handler)
+
+    return app
+
+
+def main() -> None:
+    if not BOT_TOKEN:
+        print("❌ BOT_TOKEN не найден в .env!")
+        print("Создайте .env файл: BOT_TOKEN=ваш_токен")
+        return
+
+    app = build_application()
 
     # Webhook or polling
     webhook_url = os.getenv("WEBHOOK_URL", "").strip()
