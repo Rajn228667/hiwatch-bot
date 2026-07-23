@@ -1,0 +1,44 @@
+# Koyeb deployment config — free 24/7 hosting for HiWatch bot
+#
+# Deploy steps:
+# 1. Push bot folder to a GitHub repo (e.g. github.com/STPierce/hiwatch-bot)
+# 2. Go to https://app.koyeb.com → Create Service → GitHub
+# 3. Select your repo, branch: main
+# 4. Build: Dockerfile (auto-detected)
+# 5. Instance type: Free (0.1 CPU, 512MB RAM — enough for a bot)
+# 6. Env vars (see below) — set in Koyeb dashboard
+# 7. Set WEBHOOK_URL to your Koyeb service URL (e.g. https://hiwatch-bot-abc.koyeb.app)
+# 8. Region: Frankfurt (closest to Telegram servers in Europe)
+#
+# Koyeb free tier: 1 service, 24/7, no spin-down, 512MB RAM
+
+app: hiwatch-bot
+service: bot
+image:
+  build:
+    commands:
+      - pip install --no-cache-dir -r requirements.txt
+  runtime: python
+  entrypoint: python bot.py
+instances: 1
+instance_type: free
+routes:
+  - path: /
+    port: 10000
+env:
+  - key: BOT_TOKEN
+    value: ""
+  - key: ADMIN_USERNAMES
+    value: "STPierce,Who_Knyaz"
+  - key: ADMIN_CHAT_IDS
+    value: ""
+  # Webhook for 24/7 (set to your Koyeb URL after deploy)
+  - key: WEBHOOK_URL
+    value: ""
+  - key: PORT
+    value: "10000"
+  # Hikmart website integration — orders from bot → website manager panel
+  - key: HIKMART_API_URL
+    value: "https://hikmart.vercel.app"
+  - key: HIKMART_BOT_TOKEN
+    value: "hikmart-bot-sync-2025"

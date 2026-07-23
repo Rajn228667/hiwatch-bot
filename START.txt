@@ -1,0 +1,22 @@
+﻿# HiWatch Settings Bot — БЫСТРЫЙ СТАРТ
+
+## Способ 1 (рекомендуется)
+Дважды кликни: START.bat
+
+## Способ 2 (вручную)
+1. Убедись что есть файл .env рядом с START.bat
+2. В .env строка: BOT_TOKEN=... (от @BotFather)
+3. XAI_API_KEY=... (для AI Пирс)
+4. В cmd:
+   cd /d %USERPROFILE%\Desktop\HiWatch_settings_bot
+   START.bat
+
+## Ошибка «Set BOT_TOKEN»
+Значит .env пустой или отсутствует. Открой .env в Блокноте и вставь токен.
+НЕ запускай python -m bot.main без .env
+
+## Админ
+В Telegram @STPierce: открой бота → /setadmin
+
+## Важно
+Запускай ТОЛЬКО ОДИН экземпляр бота (не два окна сразу).
