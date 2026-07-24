@@ -1,8 +1,7 @@
 """
 HiWatch Settings Bot — быстрая минималистичная версия.
-Поток: /start → выбор категории → имя → телефон → описание → заказ админам.
-Заказы → @STPierce (1930108146) и @Who_Knyaz (1418146556).
-Заказы также пушатся на сайт hikmart.vercel.app → /manager/orders.
+Поток: /start -> выбор категории -> имя -> телефон -> описание -> заказ админам.
+Заказы -> @STPierce (1930108146) и @Who_Knyaz (1418146556).
 """
 from __future__ import annotations
 
@@ -75,11 +74,10 @@ def main_menu_kb() -> ReplyKeyboardMarkup:
 
 
 def categories_kb() -> InlineKeyboardMarkup:
-    """Категории услуг — выбор при заявке."""
+    """Категории услуг — выбор при заявке (без видеонаблюдения)."""
     kb = [
         [InlineKeyboardButton("💻 Настройка ПК", callback_data="cat:setup")],
         [InlineKeyboardButton("🔧 Сборка / апгрейд ПК", callback_data="cat:build")],
-        [InlineKeyboardButton("📹 Видеонаблюдение", callback_data="cat:cam")],
         [InlineKeyboardButton("🌐 Сетевое оборудование", callback_data="cat:net")],
         [InlineKeyboardButton("🔧 СКУД / Домофоны", callback_data="cat:access")],
         [InlineKeyboardButton("💬 Консультация / другое", callback_data="cat:other")],
@@ -100,17 +98,16 @@ def after_order_kb() -> InlineKeyboardMarkup:
 
 WELCOME = (
     "👋 <b>Здравствуйте!</b>\n\n"
-    "Я бот <b>HiWatch Settings</b> — настройка ПК, сборка, видеонаблюдение "
+    "Я бот <b>HiWatch Settings</b> — настройка ПК, сборка "
     "и сетевое оборудование в Шымкенте.\n\n"
     "Выберите кнопку ниже 👇"
 )
 
 CATEGORY_LABELS = {
-    "setup": "� Настройка ПК",
+    "setup": "💻 Настройка ПК",
     "build": "🔧 Сборка / апгрейд ПК",
-    "cam": "� Видеонаблюдение",
     "net": "🌐 Сетевое оборудование",
-    "access": "� СКУД / Домофоны",
+    "access": "🔧 СКУД / Домофоны",
     "other": "💬 Консультация / другое",
 }
 
@@ -120,11 +117,9 @@ PRICES_TEXT = (
     "Windows 10/11, драйверы, программы, оптимизация\n\n"
     "🔧 <b>Сборка / апгрейд ПК</b> — от 12 000 до 30 000 ₸\n"
     "Подбор комплектующих, сборка, стресс-тест\n\n"
-    "📹 <b>Видеонаблюдение</b> — от 15 000 до 35 000 ₸\n"
-    "Hikvision, HiWatch: SADP, iVMS-4200, Hik-Connect\n\n"
     "🌐 <b>Сетевое оборудование</b> — от 5 000 до 25 000 ₸\n"
     "Роутеры, коммутаторы, настройка Wi-Fi\n\n"
-    "� <b>СКУД / Домофоны</b> — от 10 000 до 30 000 ₸\n"
+    "🔧 <b>СКУД / Домофоны</b> — от 10 000 до 30 000 ₸\n"
     "Установка, настройка, подключение\n\n"
     "━━━━━━━━━━━━━━━━━━\n"
     "🚚 Выезд по Шымкенту — <b>бесплатно</b>\n"
@@ -137,7 +132,6 @@ SERVICES_TEXT = (
     "✅ Установка драйверов и программ\n"
     "✅ Сборка ПК с нуля\n"
     "✅ Апгрейд ПК\n"
-    "✅ Видеонаблюдение (Hikvision, HiWatch, Dahua)\n"
     "✅ Сетевое оборудование (роутеры, коммутаторы)\n"
     "✅ СКУД и домофоны\n"
     "✅ Удалённая помощь\n"
@@ -147,8 +141,13 @@ SERVICES_TEXT = (
 
 OFFICE_TEXT = (
     "📍 <b>Контакты</b>\n\n"
-    "🌐 <b>Сайт:</b> hikmart.vercel.app\n"
-    "📷 <b>Instagram:</b> @hikmart.kz\n\n"
+    "📷 <b>Instagram:</b> @hiwatch.kz\n"
+    "https://www.instagram.com/hiwatch.kz\n\n"
+    "📞 <b>Менеджеры:</b>\n"
+    "+7 708 001 12 12\n"
+    "+7 777 187 17 17\n\n"
+    "📍 <b>Адрес:</b> г. Шымкент, мкр. Самал-1, 4А\n"
+    "(ТЦ «Самал», 2 этаж, бутик 42)\n\n"
     "🕐 <b>Режим работы:</b>\n"
     "Пн–Сб: 10:00 – 20:00\n"
     "Воскресенье: выходной\n\n"
@@ -207,7 +206,7 @@ async def notify_admins(context: ContextTypes.DEFAULT_TYPE, text: str) -> None:
 
 
 async def push_order_to_website(user, state: dict) -> None:
-    """Пуш заказа на сайт → /manager/orders."""
+    """Пуш заказа на сайт -> /manager/orders."""
     try:
         payload = {
             "source": "telegram",
@@ -285,7 +284,7 @@ async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         cid = user.id
         if cid not in ADMIN_CHAT_IDS:
             ADMIN_CHAT_IDS.append(cid)
-            log.info(f"Admin bound: @{user.username} → {cid}")
+            log.info(f"Admin bound: @{user.username} -> {cid}")
 
     if user:
         _clear_state(user.id)
@@ -451,7 +450,7 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         _clear_state(user.id)
         return
 
-    # Неизвестный текст → меню
+    # Неизвестный текст -> меню
     await update.message.reply_text(
         "Используйте кнопки меню 👇",
         reply_markup=main_menu_kb(),
@@ -511,7 +510,7 @@ def main() -> None:
     webhook_url = os.getenv("WEBHOOK_URL", "").strip()
     if webhook_url:
         port = int(os.getenv("PORT", "10000"))
-        print(f"🤖 Бот запущен (webhook) → {webhook_url}/{BOT_TOKEN}")
+        print(f"🤖 Бот запущен (webhook) -> {webhook_url}/{BOT_TOKEN}")
         app.run_webhook(
             listen="0.0.0.0",
             port=port,
