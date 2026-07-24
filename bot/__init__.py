@@ -1,1 +1,0 @@
-# Pierce TG bot package
